@@ -53,7 +53,10 @@ const upload_file = async function (req, res) {
                 message: "Bad request"
             })
         }
-        let uploadParams = {Bucket: bucket, Key: '', Body: ''};
+        let uploadParams = {
+            Bucket: bucket, Key: '', 
+            Body: '',
+            ACL: "public-read"};
         let avatar = req.files.avatar
         const fileLoc = './sound/' + avatar.name
         await avatar.mv('./sound/' + avatar.name)
