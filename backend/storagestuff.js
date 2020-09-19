@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk')
 const fs = require("fs")
 var s3
-const bucket = 'jojoaudio'
+const bucket = process.env.bucket
 const path = require('path');
 const initS3 = function () {
     const awsConfig = {
@@ -17,6 +17,32 @@ const initS3 = function () {
 }
 
 initS3()
+
+const getAudio = async function(req, res) {
+    try{
+        const bucketParams = {
+            Bucket : bucket
+          };
+          
+          // Call S3 to obtain a list of the objects in the bucket
+          s3.listObjects(bucketParams, function(err, data) {
+            if (err) {
+              console.log("Error", err);
+              res.status(400).send(err)
+            } else {
+              console.log("Success", data);
+              let content = data.Contents
+              const item = content[Math.floor(Math.random() * content.length)].Key
+              res.send({link:'https://' + bucket + '.s3.amazonaws.com/' + item})
+            }
+          });
+          
+        
+    }catch(err){
+        console.log(err)
+        res.status(500).send(err)
+    }
+}
 
 
 const upload_file = async function (req, res) {
@@ -65,5 +91,6 @@ const upload_file = async function (req, res) {
 }
 
 module.exports = {
-    upload_file
+    upload_file,
+    getAudio
 }

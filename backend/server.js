@@ -10,6 +10,7 @@ const _ = require("lodash")
 // const upload = multer();
 const fileUpload = require("express-fileupload")
 const storageStuff = require('./storagestuff')
+const { getAudio } = require('./storagestuff')
 
 //Port number the server runs off of
 const PORT = 8080
@@ -37,6 +38,10 @@ app.get('/',function(req,res){
 
 app.post('/upload', async function(req, res){
     await storageStuff.upload_file(req, res)
+})
+
+app.get('/audio', async function(req, res){
+    await storageStuff.getAudio(req, res)
 })
 
 app.listen(PORT,function(){
